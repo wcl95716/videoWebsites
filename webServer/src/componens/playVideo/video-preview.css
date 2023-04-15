@@ -1,0 +1,38 @@
+.video-preview {
+    position: relative;
+    width: 400px;
+    height: 200px;
+  }
+  
+  .progress-bar {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    cursor: pointer;
+  }
+  
+  .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #f00;
+  }
+  
+  .preview-window {
+    position: absolute;
+    top: -150px;
+    left: 0;
+    width: 200px;
+    height: 100px;
+    background-color: #000;
+    z-index: 1;
+    opacity: 0.8;
+  }
+  
+  .preview-window video {
+    width: 100%;
+    height: 100%;
+  }
+  
