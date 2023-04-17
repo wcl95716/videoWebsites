@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { ModifyJson } from './componens/modifyJson';
 import { Pasteboard } from './componens/pasteboard';
 import VideoPlayer from './componens/playVideo';
-import {VideoPreview} from './componens/playVideo/test';
+import {VideoList} from './componens/playVideo/test';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <div className="App">
         <h1>copilot1</h1>
         <br/>
-        <VideoPlayer/>
+        <VideoList/>
         {/* <ModifyJson/> */}
       </div>
     </Provider>
