@@ -1,61 +1,43 @@
-import "./styles.css";
-import React, { useRef, useEffect } from 'react';
+// import React from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { VideoDetail, getVideoDetailList, selectVideoDetailList } from './index.model';
 
-const PreviewVideo: React.FC<{ src: string }> = ({ src }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+// // VideoPlay 播放单个视频 
+// // 参数为 { videoDetail :VideoDetail, videoUrl:videoUrl}
+// export const VideoPlay: React.FC<{videoDetail :VideoDetail, videoUrl:string}> = ({videoDetail, videoUrl}) => {
+//   return (
+//     <>
+//       <div>
+//         <video controls src={`${videoUrl}getVideo?video_name=${videoDetail.name}`}/>
+//       </div>
+//     </>
+//   );
+// };
 
-  useEffect(() => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if(!canvas || !video  ) return;
-    const context = canvas.getContext('2d');
-    if (! context) return ;
-    const handleTimeUpdate = () => {
-      const currentTime = video.currentTime;
-      const img = new Image();
-      img.src = `${src}#t=${currentTime}`;
-      img.addEventListener('load', () => {
-        context.drawImage(img, 0, 0, canvas.width, canvas.height);
-      });
-    };
+// // 展示播放视频列表,随机选取一帧画面做预览图
+// // 点击按钮跳转播放视频
+// export const VideoList: React.FC = () => {
+//   const dispatch = useDispatch();
+//   const videoDetailList = useSelector(selectVideoDetailList);
 
-    video.addEventListener('timeupdate', handleTimeUpdate);
+//   React.useEffect(() => {
+//     dispatch(getVideoDetailList() as any);
+//   }, [dispatch]);
 
-    return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate);
-    };
-  }, [src]);
+//   return (
+//     <>
+//       <div>
+//         <h1>视频播放列表</h1>
+//         <div>
+//           {videoDetailList.videos.map((videoDetail) => (
+//             <div>
+//               <a href={`${videoDetailList.videoUrl}toVideo?video_name=${videoDetail.name}`}>{videoDetail.name}</a>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
 
-  return (
-    <div style={{ position: 'relative' }}>
-      <video ref={videoRef} src={src} controls  width="390" height="390" />
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
-      />
-    </div>
-  );
-};
-
-
-// http://192.168.0.113:5000/videos
-// http://127.0.0.1:5000/videos
-export default function VideoPlayer() {
-  return (
-    <div>
-      <video controls width="390" height="390" >
-        <source src="http://192.168.0.113:5000/videos" type="video/mp4" />
-      </video>
-      {/* <PreviewVideo  src="http://192.168.0.113:5000/videos"   /> */}
-    </div>
-  );
-}
-
+export {};

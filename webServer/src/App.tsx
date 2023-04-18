@@ -4,7 +4,6 @@ import { store } from './store';
 import { Provider } from 'react-redux';
 import { ModifyJson } from './componens/modifyJson';
 import { Pasteboard } from './componens/pasteboard';
-import VideoPlayer from './componens/playVideo';
 import {VideoList} from './componens/playVideo/test';
 
 function App() {
