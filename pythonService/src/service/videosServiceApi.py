@@ -2,11 +2,17 @@
 
 import json
 import logging
+import time
+import cv2
 from flask import Flask, request, send_file, send_from_directory
 from flask_cors import CORS
 import os
 import sys
 sys.path.append('../tools/')
+
+from videoPreview import VideoPreview, get_frame_list
+
+
 import ev
 # No module named 'ev'
 
@@ -20,7 +26,6 @@ app = Flask(__name__)
 CORS(app) # 解决跨域问题
 app.logger.setLevel(logging.DEBUG)
 
-import ffmpeg
 
 
 @app.route('/getVideosDetail')
@@ -59,7 +64,27 @@ def toVideo():
         <video src="getVideo?video_name={video_name}" width="800" height="600" controls></video>
         """
 
+def video_preview_stream(frame_list:VideoPreview):
+    while True:
+        for frame in frame_list.get_frames():
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            time.sleep(1.0/frame_list.get_fps())
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+@app.route("/toVideoPreview")
+def toVideoPreview():
+    video_name = request.args.get('video_name')
+    print(video_name)
+    videoDetailList:ev.VideoDetailList = ev.getVideoDetailList()
+    video:ev.VideoDetail = videoDetailList.get_video(video_name)
+    print("video.path ",video.path)
+    frame_list:VideoPreview = get_frame_list(video.path)
+    print("frame_list ",len(frame_list.get_frames()))
+    return app.response_class(video_preview_stream(frame_list), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 if __name__ == '__main__':
-    #app.run(host='127.0.0.1',port=5000,debug=True)
-    app.run(host='192.168.0.108',port=5000,debug=False)
+    app.run(host='127.0.0.1',port=5000,debug=True)
+    #app.run(host='192.168.0.108',port=5000,debug=False)

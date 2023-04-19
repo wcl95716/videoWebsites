@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { VideoDetail, getVideoDetailList, selectVideoDetailList } from './index.model';
 import React, { useEffect, useRef, useState } from 'react';
+import VideoPreviewImg from './componens';
 
 
 const VideoPreview: React.FC<{videoDetail :VideoDetail, videoUrl:string}> = ({videoDetail, videoUrl}) => {
@@ -73,7 +74,8 @@ export const VideoList: React.FC = () => {
           {videoDetailList.videos.map((videoDetail) => (
             <div>
               {/* <a href={`${videoDetailList.videoUrl}toVideo?video_name=${videoDetail.name}`}>{videoDetail.name}</a> */}
-              <VideoPreview videoDetail={videoDetail} videoUrl={videoDetailList.videoUrl}/>
+              {/* <VideoPreview videoDetail={videoDetail} videoUrl={videoDetailList.videoUrl}/> */}
+              <VideoPreviewImg videoDetail={videoDetail} videoUrl={videoDetailList.videoUrl}/>
             </div>
           ))}
         </div>

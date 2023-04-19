@@ -106,14 +106,15 @@ class VideoDetailList:
 def scan():
     file_db = []
     print("正在初始化...")
-    for url in ( "F\\", "G:\\"):     # 如果有更多磁盘，可以继续添加
+    for url in ( r"D:\videos", "G:\\"):     # 如果有更多磁盘，可以继续添加
         for root, dirs, files in os.walk(url):
+            print(files)
             for file in files:
                 # 将文件名添加到列表中
                 file_db.append(
                      os.path.join(root, file) # 将路径和文件名合并
                                ) 
-    os.system("cls")
+    #os.system("cls")
     return file_db
 def getVideoDetailList() -> VideoDetailList :
     file_db = scan()
@@ -123,7 +124,7 @@ def getVideoDetailList() -> VideoDetailList :
         #print("asdasd " , os.path.splitext(file)[1])
         if filename.lower() in os.path.splitext(file)[1].lower():
             video = VideoDetail(file)
-            if video.byteSize > convert_to_bytes("50m"):
+            if video.byteSize > convert_to_bytes("1m"):
                 videos.add_video(video)
     return videos
 
