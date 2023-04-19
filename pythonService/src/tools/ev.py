@@ -51,18 +51,8 @@ def get_file_size(file_path):
     
 
 
-def scan():
-    file_db = []
-    print("正在初始化...")
-    for url in ( "F\\", "G:\\"):     # 如果有更多磁盘，可以继续添加
-        for root, dirs, files in os.walk(url):
-            for file in files:
-                # 将文件名添加到列表中
-                file_db.append(
-                     os.path.join(root, file) # 将路径和文件名合并
-                               ) 
-    os.system("cls")
-    return file_db
+
+
 
 class VideoDetail:
     def __init__(self, path):
@@ -113,6 +103,18 @@ class VideoDetailList:
 
     pass
     
+def scan():
+    file_db = []
+    print("正在初始化...")
+    for url in ( "F\\", "G:\\"):     # 如果有更多磁盘，可以继续添加
+        for root, dirs, files in os.walk(url):
+            for file in files:
+                # 将文件名添加到列表中
+                file_db.append(
+                     os.path.join(root, file) # 将路径和文件名合并
+                               ) 
+    os.system("cls")
+    return file_db
 def getVideoDetailList() -> VideoDetailList :
     file_db = scan()
     videos = VideoDetailList()
@@ -123,10 +125,6 @@ def getVideoDetailList() -> VideoDetailList :
             video = VideoDetail(file)
             if video.byteSize > convert_to_bytes("50m"):
                 videos.add_video(video)
-    # for num, video in enumerate(videos.get_videos()):
-    #     print(num+1, video.name, video.path, video.byteSize , video.sizeStr)
-    #     print (json.dumps(video.__dict__(),indent=4) )
-    # print(json.dumps(videos.__dict__()))
     return videos
 
 if __name__ == '__main__':
