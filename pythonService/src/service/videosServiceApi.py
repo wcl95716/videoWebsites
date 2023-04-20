@@ -64,25 +64,7 @@ def toVideo():
         <video src="getVideo?video_name={video_name}" width="800" height="600" controls></video>
         """
 
-def video_preview_stream(frame_list:VideoPreview):
-    while True:
-        for frame in frame_list.get_frames():
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            time.sleep(1.0/frame_list.get_fps())
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-@app.route("/toVideoPreview")
-def toVideoPreview():
-    video_name = request.args.get('video_name')
-    print(video_name)
-    videoDetailList:ev.VideoDetailList = ev.getVideoDetailList()
-    video:ev.VideoDetail = videoDetailList.get_video(video_name)
-    print("video.path ",video.path)
-    frame_list:VideoPreview = get_frame_list(video.path)
-    print("frame_list ",len(frame_list.get_frames()))
-    return app.response_class(video_preview_stream(frame_list), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 if __name__ == '__main__':

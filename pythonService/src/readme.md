@@ -1,9 +1,22 @@
 
 
-import random
-import cv2
 
 
+``` py
+# 这个方法是将图片按照视频帧的分割方法流传输
+# 但是实际效果并不好
+def video_preview_stream(frame_list:VideoPreview):
+    while True:
+        for frame in frame_list.get_frames():
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            time.sleep(1.0/frame_list.get_fps())
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+```
+
+
+``` py
 def get_timestamp_list( num_frames , segment_length, count = 5 ):
     timestamp_list = []
     # 生成时间戳列表 以便在指定的时间戳处开始读取视频帧
@@ -46,6 +59,7 @@ def select_random_video_segment(video_path, segment_duration=5):
                             ),
                              )
 
+    ## 这个地方效率太低 , 所以这里的东西建议预处理
     for timestamp in timestamp_list:
     # 跳过一些帧，以便在指定的时间戳处开始读取视频帧
         cap.set(cv2.CAP_PROP_POS_FRAMES, timestamp)
@@ -59,9 +73,4 @@ def select_random_video_segment(video_path, segment_duration=5):
     out.release()
     cap.release()
 
-
-if __name__ == '__main__':
-    path = r"D:\videos\3868710446aa1b7bb60d3e5e71c8ca5f.mp4"
-    select_random_video_segment(path)
-
-
+```
