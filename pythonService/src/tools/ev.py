@@ -85,7 +85,12 @@ class VideoDetailList:
             'videos': videos,
             'videoUrl': self.videoUrl,
         }
-        
+    
+    def delete_video(self, video_name:str):
+        video = self.__videosMap[video_name]
+        self.__videos.remove(video)
+        self.__videosMap.pop(video_name)
+        pass
     def add_video_path(self, path):
         self.__videos.append(VideoDetail(path))
         
@@ -97,7 +102,10 @@ class VideoDetailList:
         return self.__videos
     
     def get_video(self,video_name:str):
-        return self.__videosMap[video_name]
+        if video_name in self.__videosMap:
+            return self.__videosMap[video_name]
+        else :
+            return None
         pass
     
 
@@ -106,9 +114,9 @@ class VideoDetailList:
 def scan():
     file_db = []
     print("正在初始化...")
-    for url in ( r"D:\videos", "G:\\"):     # 如果有更多磁盘，可以继续添加
+    for url in ( r"F:", r"G:"):     # 如果有更多磁盘，可以继续添加
         for root, dirs, files in os.walk(url):
-            print(files)
+            #print(files)
             for file in files:
                 # 将文件名添加到列表中
                 file_db.append(
@@ -119,18 +127,30 @@ def scan():
 def getVideoDetailList() -> VideoDetailList :
     file_db = scan()
     videos = VideoDetailList()
+    videos_preview = VideoDetailList()
     filename = ".mp4" #input("请输入要搜索的文件名：")
     for file in file_db:
         #print("asdasd " , os.path.splitext(file)[1])
+        # 判断文件名后缀是否为 .mp4 , 文件名中可能包含 '.'
+        # like : OMG! Step Sister Caught me with Girlfriend And.. FULL Reislin&SiaSiberia 4K_LittleReislin_1080p.mp4
+        
+        
         if filename.lower() in os.path.splitext(file)[1].lower():
             video = VideoDetail(file)
-            if video.byteSize > convert_to_bytes("1m"):
-                videos.add_video(video)
-    return videos
+            if video.byteSize > convert_to_bytes("50m") or video.name.startswith("preview"):
+                video.name = video.name.replace("&"," ")
+                if video.name.startswith("preview"):
+                    videos_preview.add_video(video)
+                else :
+                    videos.add_video(video)
+    return videos,videos_preview
 
 if __name__ == '__main__':
-    getVideoDetailList()
-    print( convert_to_bytes("100M") )
-    
-    
-    
+    # getVideoDetailList()
+    # print( convert_to_bytes("100M") )
+    # videos,videos_preview = getVideoDetailList()
+    videos,videos_preview = getVideoDetailList()
+    for video in videos_preview.get_videos():
+        print(video.name,video.path,video.sizeStr,video.byteSize)
+        os.remove(video.path)
+    pass 
